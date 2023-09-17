@@ -10,6 +10,9 @@ pub fn build(b: *Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
     const linkage = b.option(Linkage, "linkage", "The linking mode for the ICU libraries");
+    const module = b.addModule("common", .{ .source_file = LazyPath.relative("build.zig") });
+    _ = module;
+
     const lib_name = "icuuc";
 
     var lib = addLibraryWithLinkage(b, .{
