@@ -25,7 +25,7 @@ pub fn build(b: *Build) !void {
 
     lib.linkLibCpp();
     addSourceFiles(b, lib, &.{ "-fno-exceptions", "-DU_COMMON_IMPLEMENTATION", linkage_def }) catch @panic("OOM");
-    lib.addIncludePath(.{ .cwd_relative = "cpp" });
+    lib.addIncludePath(.{ .path = "cpp" });
     installInternalHeaders(b, lib) catch @panic("OOM");
     lib.installHeadersDirectory(b.pathFromRoot(b.pathJoin(&.{ "cpp", "unicode" })), "unicode");
     b.installArtifact(lib);
