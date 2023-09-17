@@ -32,22 +32,20 @@ pub fn build(b: *Build) !void {
 }
 
 fn installInternalHeaders(b: *Build, artifact: *Step.Compile) !void {
-    var dir = try std.fs.cwd().openIterableDir("cpp", .{ .access_sub_paths = false });
-    var walker = try dir.walk(b.allocator);
-    defer walker.deinit();
+    const dir = try std.fs.cwd().openIterableDir("cpp", .{});
+    var iterator = dir.iterate();
 
-    const allowed_exts = [_][]const u8{ ".h", ".hpp" };
-    while (try walker.next()) |entry| {
-        const ext = std.fs.path.extension(entry.basename);
-        const include_file = for (allowed_exts) |e| {
-            if (std.mem.eql(u8, ext, e))
+    const allowed_extensions = [_][]const u8{ ".h", ".hpp", ".hxx", ".h++" };
+    while (try iterator.next()) |path| {
+        const extension = std.fs.path.extension(path.name);
+        const is_allowed = for (allowed_extensions) |ext| {
+            if (std.mem.eql(u8, ext, extension)) {
                 break true;
+            }
         } else false;
 
-        if (include_file) {
-            // we need to clone the path as walker.next()
-            const duped = b.dupe(entry.path);
-            artifact.installHeader(b.pathJoin(&.{ "cpp", duped }), duped);
+        if (is_allowed) {
+            artifact.installHeader(b.pathFromRoot(b.pathJoin(&.{ "cpp", path.name })), b.dupePath(path.name));
         }
     }
 }
