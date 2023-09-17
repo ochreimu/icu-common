@@ -24,8 +24,6 @@ pub fn build(b: *Build) !void {
     addSourceFiles(b, lib, &.{ "-fno-exceptions", "-DU_COMMON_IMPLEMENTATION", linkage_def }) catch @panic("OOM");
     lib.addIncludePath(LazyPath.relative("cpp"));
     installInternalHeaders(b, lib) catch @panic("OOM");
-    lib.installHeadersDirectory(b.pathFromRoot(b.pathJoin(&.{ "cpp", "unicode" })), "unicode");
-
     b.installArtifact(lib);
 }
 
@@ -45,7 +43,7 @@ fn installInternalHeaders(b: *Build, artifact: *Step.Compile) !void {
         if (include_file) {
             // we need to clone the path as walker.next()
             const duped = b.dupe(entry.path);
-            artifact.installHeader(b.pathJoin(&.{ "cpp", duped }), b.pathJoin(&.{ "internal", artifact.name, duped }));
+            artifact.installHeader(b.pathJoin(&.{ "cpp", duped }), duped);
         }
     }
 }
