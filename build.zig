@@ -45,7 +45,7 @@ fn installInternalHeaders(b: *Build, artifact: *Step.Compile) !void {
         } else false;
 
         if (is_allowed) {
-            artifact.installHeader(b.pathFromRoot(b.pathJoin(&.{ "cpp", path.name })), b.dupePath(path.name));
+            artifact.installHeader(b.pathFromRoot(b.pathJoin(&.{ "cpp", path.name })), b.pathJoin(&.{ "internal", artifact.name, path.name }));
         }
     }
 }
