@@ -22,7 +22,11 @@ pub fn build(b: *std.Build) !void {
 
     lib.linkLibCpp();
     lib.defineCMacro("U_COMMON_IMPLEMENTATION", null);
+
+    // HACK This is an ugly trick
+    lib.addIncludePath(.{ .path = "cpp" });
     addSourceFiles(b, lib, &.{ "-fno-exceptions", "-Icpp" }) catch @panic("OOM");
+
     lib.installHeadersDirectory(b.pathFromRoot(b.pathJoin(&.{ "cpp", "unicode" })), "unicode");
     b.installArtifact(lib);
 }
