@@ -1,4 +1,11 @@
 .{
     .name = "icuuc",
     .version = "74.0.0", // The version should be the same as underlying ICU4C.
+    .paths = .{
+        "cpp",
+        "build.zig",
+        "build.zig.zon",
+        "LICENSE",
+        "README.md",
+    },
 }

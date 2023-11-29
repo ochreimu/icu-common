@@ -41,5 +41,8 @@ fn addSourceFiles(b: *std.Build, artifact: *std.Build.Step.Compile, flags: []con
         try files.append(b.pathJoin(&.{ "cpp", line }));
     }
 
-    artifact.addCSourceFiles(files.items, flags);
+    artifact.addCSourceFiles(.{
+        .files = files.items,
+        .flags = flags,
+    });
 }
