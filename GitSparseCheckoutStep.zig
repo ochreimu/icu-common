@@ -259,3 +259,11 @@ fn make(step: *std.Build.Step, progress: *std.Progress.Node) !void {
         }
     };
 }
+
+// Get's the repository path and also verifies that the step requesting the path
+// is dependent on this step.
+pub fn getPath(self: *const GitSparseCheckoutStep, who_wants_to_know: *const std.build.Step) []const u8 {
+    if (!hasDependency(who_wants_to_know, &self.step))
+        @panic("a step called GitSparseCheckoutStep.getPath but has not added it as a dependency");
+    return self.path;
+}
